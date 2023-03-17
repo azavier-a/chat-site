@@ -150,9 +150,8 @@
 
     socket.on('connect', () => {
       sig.value = localStorage.getItem('signature');
-      if(sig.value == '') {
-        sig.value = 'Guest ' + io.engine.clientsCount;
-      }
+      if(sig.value == '')
+        sig.value = 'Guest';
     });
   </script>
 </body>
