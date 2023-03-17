@@ -131,16 +131,17 @@
     form.addEventListener('submit', function(e) {
       e.preventDefault();
 
-      if(input.value) {
-        let signature = "Guest " + socket.engine.clientsCount;
-        if(sig.value) {
-          signature = sig.value;
-        }
-
-        socket.emit('chat message', input.value, signature);
+      if(input.value && sig.value) {
+        socket.emit('chat message', input.value, sig.value);
 
         input.value = '';
       }
+    });
+
+    socket.on('guest number', function(id, num) {
+      if(socket.id != id) return;
+
+      sig.value = 'Guest ' + num;
     });
 
     socket.on('chat message', function(msg, sig) {
