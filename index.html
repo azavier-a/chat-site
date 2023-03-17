@@ -153,21 +153,31 @@
 
       if(input.value && sig.value && rec.value) {
         socket.emit('chat message', input.value, sig.value, rec.value);
-        
+
         localStorage.setItem('signature', sig.value);
         input.value = '';
-      }
-    });
 
-    socket.on('messages', function(data) {
-      list.innerHTML = '';
-      for(let d of data) {
-        const item = document.createElement('li');
-        item.setAttribute('class', 'message');
-        item.textContent = data['message'] + '  -' + data['send'];
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', 'messages.php');
+        xhr.addEventListener('load', function() {
+          //response from PHP
+          let data = JSON.parse(this.responseText);
+          list.innerHTML = '';
+          for(let d of data) {
+            const item = document.createElement('li');
+            item.setAttribute('class', 'message');
+            item.textContent = data['message'] + '  -' + data['send'];
 
-        list.appendChild(item);
-        list.scrollTo(0, list.scrollHeight);
+            list.appendChild(item);
+            list.scrollTo(0, list.scrollHeight);
+          }
+        });
+
+        let data = new FormData();
+        data.append('signature', sig);
+        data.append('recipient', rec);
+        data.append('message', msg);
+        xhr.send(data);
       }
     });
 
