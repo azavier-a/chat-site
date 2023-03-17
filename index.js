@@ -6,13 +6,20 @@ const app = express();
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 
+let users = 0;
+const user = {};
+
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
 
 io.on('connection', (socket) => {
   console.log('user connected (' + socket.id + ')');
-  io.emit('guest number', socket.id, io.engine.clientsCount);
+  users++;
+  if(!user[socket.id])
+    user[socket.id] = users;
+  
+  io.emit('guest number', socket.id, user[socket.id]);
 
   socket.on('chat message', (msg, sig) => {
     console.log(sig + ' sent message: ' + msg);
