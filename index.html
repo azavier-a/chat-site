@@ -154,10 +154,7 @@
     });
 
     socket.on('connect', () => {
-      if(localStorage.getItem('signature'))
-        sig.value = localStorage.getItem('signature');
-      else
-        sig.value = 'Guest';
+      sig.value = localStorage.getItem('signature');
     });
 
     socket.on('disconnect', () => {
