@@ -14,9 +14,9 @@ io.on('connection', (socket) => {
   console.log('user connected (' + socket.id + ')');
   io.emit('guest number', socket.id, io.engine.clientsCount);
 
-  socket.on('chat message', (msg) => {
-    console.log('user sent message: ' + msg);
-    io.emit('chat message', msg);
+  socket.on('chat message', (msg, sig) => {
+    console.log(sig + ' sent message: ' + msg);
+    io.emit('chat message', msg, sig);
   });
 
   socket.on('disconnect', () => {
