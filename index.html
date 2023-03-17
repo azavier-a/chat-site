@@ -174,9 +174,9 @@
         });
 
         let data = new FormData();
-        data.append('signature', sig);
-        data.append('recipient', rec);
-        data.append('message', msg);
+        data.append('signature', sig.value);
+        data.append('recipient', rec.value);
+        data.append('message', input.value);
         xhr.send(data);
       }
     });
