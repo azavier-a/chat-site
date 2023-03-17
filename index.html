@@ -152,6 +152,17 @@
       list.appendChild(item);
       list.scrollTo(0, list.scrollHeight);
     });
+
+    socket.on('connect', () => {
+      if(localStorage.getItem('signature'))
+        sig.value = localStorage.getItem('signature');
+      else
+        sig.value = 'Guest';
+    });
+
+    socket.on('disconnect', () => {
+      localStorage.setItem('signature', sig.value);
+    });
   </script>
 </body>
 
