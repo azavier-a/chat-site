@@ -8,7 +8,7 @@ const io = require('socket.io')(server);
 
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
-  res.sendFile(__dirname + '/messages.php');
+  req.sendFile(__dirname + '/messages.php');
 });
 
 io.on('connection', (socket) => {
