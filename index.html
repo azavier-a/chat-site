@@ -133,21 +133,16 @@
 
       if(input.value && sig.value) {
         socket.emit('chat message', input.value, sig.value);
+        localStorage.setItem('signature', sig.value);
 
         input.value = '';
       }
     });
 
-    socket.on('guest number', function(id, num) {
-      if(socket.id != id) return;
-
-      sig.value = 'Guest ' + num;
-    });
-
     socket.on('chat message', function(msg, sig) {
       const item = document.createElement('li');
       item.setAttribute('class', 'message');
-      item.textContent = msg + ' - ' + sig;
+      item.textContent = msg + '  -' + sig;
 
       list.appendChild(item);
       list.scrollTo(0, list.scrollHeight);
@@ -155,10 +150,6 @@
 
     socket.on('connect', () => {
       sig.value = localStorage.getItem('signature');
-    });
-
-    socket.on('disconnect', () => {
-      localStorage.setItem('signature', sig.value);
     });
   </script>
 </body>
