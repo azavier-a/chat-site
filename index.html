@@ -96,6 +96,24 @@
       overflow-y: hidden;
       overflow-x: hidden;
     }
+
+    #signature {
+      position: fixed;
+      top: 0;
+      right: 0;
+
+      height: 1rem;
+      font-size: 12px;
+    }
+
+    #recipient {
+      position: fixed;
+      top: 1rem;
+      right: 0;
+
+      height: 1rem;
+      font-size: 12px;
+    }
   </style>
 </head>
 
@@ -112,6 +130,7 @@
   <footer>
     <form action="" id="form">
       <input id="signature" autocomplete="off"/>
+      <input id="recipient" autocomplete="off" placeholder="recipient"/>
       <input id="input" autocomplete="off"/>
       <button>Send</button>
     </form>
@@ -126,26 +145,30 @@
     const form = document.getElementById('form');
     const input = document.getElementById('input');
     const sig = document.getElementById('signature');
+    const rec = document.getElementById('recipient');
     const list = document.getElementById('messages');
 
     form.addEventListener('submit', function(e) {
       e.preventDefault();
 
-      if(input.value && sig.value) {
-        socket.emit('chat message', input.value, sig.value);
+      if(input.value && sig.value && rec.value) {
+        socket.emit('chat message', input.value, sig.value, rec.value);
+        
         localStorage.setItem('signature', sig.value);
-
         input.value = '';
       }
     });
 
-    socket.on('chat message', function(msg, sig) {
-      const item = document.createElement('li');
-      item.setAttribute('class', 'message');
-      item.textContent = msg + '  -' + sig;
+    socket.on('messages', function(data) {
+      list.innerHTML = '';
+      for(let d of data) {
+        const item = document.createElement('li');
+        item.setAttribute('class', 'message');
+        item.textContent = data['message'] + '  -' + data['send'];
 
-      list.appendChild(item);
-      list.scrollTo(0, list.scrollHeight);
+        list.appendChild(item);
+        list.scrollTo(0, list.scrollHeight);
+      }
     });
 
     socket.on('connect', () => {
